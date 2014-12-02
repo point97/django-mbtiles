@@ -15,15 +15,15 @@ def tile(request, name, z, x, y, catalog=None):
     try:
         mbtiles = MBTiles(name, catalog)
         data = mbtiles.tile(z, x, y)
-        response = HttpResponse(mimetype='image/png')
-        response.write(data)
+        response = HttpResponse(content_type='image/png')
+        response.write(str(data))
         return response
     except MBTilesNotFoundError, e:
         logger.warning(e)
     except MissingTileError:
         logger.warning(_("Tile %s not available in %s") % ((z, x, y), name))
         if not app_settings.MISSING_TILE_404:
-            return HttpResponse(mimetype="image/png")
+            return HttpResponse(content_type="image/png")
     raise Http404
 
 
